@@ -23,6 +23,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Link} from "react-router-dom";
+import DialogWindow from "../../UI/DialogWindow/DialogWindow";
+import {Grid} from "@mui/material";
+import Logo from "./../../../Assets/Images/logo.png"
+import CustomInput from "../../UI/CustomInput/CustomInput";
 
 const drawerWidth = 240;
 
@@ -77,6 +81,15 @@ export default function MainMenu({content}) {
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -100,6 +113,50 @@ export default function MainMenu({content}) {
 
     return (
         <Box sx={{display: 'flex'}}>
+            <DialogWindow
+                open={openDialog}
+                handleClose={handleCloseDialog}
+                fullWidth={true}
+                maxWidth={'xs'}
+                content={
+                    <Box sx={{p:5}}>
+                        <form>
+                            <Grid
+                                container
+                                direction="column"
+                                justifyContent="center"
+                                alignItems="center"
+                                spacing={3}
+                            >
+                                <Grid item xs={12}>
+                                    <img src={Logo}/>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <CustomInput
+                                        required
+                                        label="Адрес эл. почты"
+                                        type="email"
+                                        helperText="Введите адрес электронной почты"
+                                        name="email"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <CustomInput
+                                        required
+                                        label="Пароль"
+                                        type="password"
+                                        helperText="Введите пароль"
+                                        name="password"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </Box>
+                }
+            />
             <CssBaseline/>
             <AppBar sx={{background: "rgba(57,95,182,0)", borderBottom: "1px solid #fff", boxShadow: 0, height: 70}}
                     position="fixed" open={open}>
@@ -151,7 +208,7 @@ export default function MainMenu({content}) {
                                 </Menu>
                             </div>
                             :
-                            <Link style={{color: "#fff", textDecoration: "none"}} to="/login">Войти</Link>
+                            <div onClick={handleClickOpenDialog}>Войти</div>
                     }
                 </Toolbar>
             </AppBar>
