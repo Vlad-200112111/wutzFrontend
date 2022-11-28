@@ -1,0 +1,119 @@
+.slider {
+  overflow: hidden;
+  position: relative;
+  height: 600px !important;
+  bottom: 70px;
+
+  & .slide-list {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+
+    & .slide {
+      flex: 1 0 100%;
+      position: relative;
+
+      & .slide-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+        display: flex;
+        margin: 0 auto;
+        width: 100%;
+        object-fit: contain;
+      }
+
+      & .slide-title {
+        position: absolute;
+        top:60%;
+        left: 50%;
+        width: 500px;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        margin-top: 10px;
+        color: white;
+        z-index: 4;
+      }
+    }
+  }
+
+  & .main-logo{
+    position: absolute;
+    top: 15%;
+    left: 2%;
+    z-index: 6;
+    display: flex;
+  }
+
+  /* DOTS */
+
+  & .dots {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    z-index: 3;
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    & .dot {
+      background-color: #e7e7e7;
+      border-radius: 5px;
+      height: 10px;
+      margin: 5px;
+      width: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.selected {
+        background-color: #395fb6;
+      }
+    }
+  }
+
+  /* ARROWS */
+
+  & .arrows {
+    color: white;
+    display: flex;
+    font-size: 30px;
+    justify-content: space-between;
+    height: 100%;
+    position: absolute;
+    top: 60%;
+    width: 100%;
+    z-index: 3;
+
+    & .arrow {
+      height: 70px;
+      width: 70px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.left {
+        background-image: url(./../../../Assets/Swg/arrow.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-left: 5px;
+        transform: rotate(
+                        180deg);
+      }
+
+      &.right {
+        background-image: url(./../../../Assets/Swg/arrow.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-right: 5px;
+      }
+    }
+  }
+}
