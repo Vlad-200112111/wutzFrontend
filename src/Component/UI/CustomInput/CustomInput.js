@@ -5,26 +5,26 @@ import { FormControl, InputBase, InputLabel } from '@mui/material';
 
 const CssTextField = styled(TextField)({
     '& label.Mui-focused': {
-        color: '#038400',
+        color: 'rgba(57, 95, 182, 1)',
     },
 
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
+            borderRadius: 0,
             transition: "all 0.3s ease",
-            border: "1px dashed #A7A7A7"
         },
         '&:hover fieldset': {
             border: "1px solid #000"
         },
         '&.Mui-focused fieldset': {
-            border: "1px solid #038400"
+            border: "1px solid rgba(57, 95, 182, 1)"
         },
     },
 });
 
 
 
-function CustomInput ({form, fullWidth, ...restProps}) {
+function CustomInput ({form, fullWidth = true, ...restProps}) {
 
     return (
         <>

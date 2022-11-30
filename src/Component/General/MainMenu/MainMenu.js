@@ -18,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -27,6 +27,8 @@ import DialogWindow from "../../UI/DialogWindow/DialogWindow";
 import {Grid} from "@mui/material";
 import Logo from "./../../../Assets/Images/logo.png"
 import CustomInput from "../../UI/CustomInput/CustomInput";
+import CustomButton from "../../UI/CustomButton/CustomButton";
+import api from "../../../Services/api";
 
 const drawerWidth = 240;
 
@@ -83,6 +85,11 @@ export default function MainMenu({content}) {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
 
+    useEffect(async () => {
+
+
+    },[])
+
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -111,6 +118,17 @@ export default function MainMenu({content}) {
         setAnchorEl(null);
     };
 
+    async function LoginFunction(event){
+        event.preventDefault()
+        const formData = new FormData(event.target)
+        const {data: jwt} = await api.account.login(formData)
+        localStorage.setItem('access-token', jwt.access)
+        localStorage.setItem('refresh-token', jwt.refresh)
+        await api.account.list({
+            token: jwt.access
+        })
+    }
+
     return (
         <Box sx={{display: 'flex'}}>
             <DialogWindow
@@ -118,21 +136,20 @@ export default function MainMenu({content}) {
                 handleClose={handleCloseDialog}
                 fullWidth={true}
                 maxWidth={'xs'}
+                dialogTitle="Авторизация"
                 content={
-                    <Box sx={{p:5}}>
-                        <form>
+                    <Box sx={{p:5, width: '100%'}}>
+                        <form onSubmit={LoginFunction}>
                             <Grid
                                 container
                                 direction="column"
                                 justifyContent="center"
                                 alignItems="center"
-                                spacing={3}
+                                spacing={2}
                             >
-                                <Grid item xs={12}>
-                                    <img src={Logo}/>
-                                </Grid>
-                                <Grid item xs={12}>
+                                <Grid item sx={{width: '100%'}}>
                                     <CustomInput
+                                        fullWidth='100%'
                                         required
                                         label="Адрес эл. почты"
                                         type="email"
@@ -140,8 +157,9 @@ export default function MainMenu({content}) {
                                         name="email"
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item sx={{width: '100%'}}>
                                     <CustomInput
+                                        fullWidth='100%'
                                         required
                                         label="Пароль"
                                         type="password"
@@ -150,7 +168,7 @@ export default function MainMenu({content}) {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-
+                                    <CustomButton type={'submit'} title={"Войти в личный кабинет"}></CustomButton>
                                 </Grid>
                             </Grid>
                         </form>

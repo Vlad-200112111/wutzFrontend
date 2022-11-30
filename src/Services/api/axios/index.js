@@ -4,16 +4,16 @@ import axios from "axios";
 
 
 const axiosInstance = axios.create({
-    baseURL: "baseURL",
+    baseURL: "http://127.0.0.1:8000/api/v1/",
 });
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        // const authToken = Cookies.get("auth-token");
-        //
-        // if (authToken) {
-        //     config.headers.authorization = `Bearer ${authToken}`;
-        // }
+        const authToken = localStorage.getItem('access-token')
+
+        if (authToken) {
+            config.headers.authorization = `Bearer ${authToken}`;
+        }
 
         return config;
     },

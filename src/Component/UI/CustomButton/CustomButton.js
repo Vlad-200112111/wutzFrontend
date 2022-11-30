@@ -1,13 +1,14 @@
 import {Button} from '@mui/material';
 import React from 'react';
-import useStylesButton from './CustomButtonStyle';
+import "./Button.css"
 
-function CustomButton({children, className, secondaryColor, ...restProps}) {
-    const classesButton = useStylesButton()
+function CustomButton({title, type, ...restProps}) {
     return (
         <Button
-            className={[className, secondaryColor ? classesButton.SecondaryButton : classesButton.Button].join(' ')} {...restProps}>
-            {children}
+            variant="contained"
+            type={type}
+            className={"button"}>
+            {title}
         </Button>
     );
 

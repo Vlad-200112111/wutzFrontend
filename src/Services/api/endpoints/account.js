@@ -9,9 +9,12 @@ const config = {
 };
 
 const endpoints = {
-    // login: (data) => axios.post("Authorization/api/v1/AUser", data).catch(() => {
-    //     return "ERROR"
-    // }),
+    login: (data) => axios.post("jwt/create/", data).catch(() => {
+        return "ERROR"
+    }),
+    list: (data) => axios.post('jwt/verify/', data).catch(() => {
+    return "ERROR"
+}),
 
 };
 
