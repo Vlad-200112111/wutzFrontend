@@ -124,9 +124,7 @@ export default function MainMenu({content}) {
         const {data: jwt} = await api.account.login(formData)
         localStorage.setItem('access-token', jwt.access)
         localStorage.setItem('refresh-token', jwt.refresh)
-        await api.account.list({
-            token: jwt.access
-        })
+        setOpenDialog(false)
     }
 
     return (

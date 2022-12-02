@@ -9,12 +9,24 @@ const config = {
 };
 
 const endpoints = {
-    login: (data) => axios.post("jwt/create/", data).catch(() => {
+    login: (data) => axios.post("token/create/", data).catch(() => {
         return "ERROR"
     }),
-    list: (data) => axios.post('jwt/verify/', data).catch(() => {
-    return "ERROR"
-}),
+    checkAuthorization: (data) => axios.post("token/verify/",
+        {
+            token: data
+        }
+    ),
+    getProfileList: () => axios.get('profile/').catch(() => {
+        return "ERROR"
+    }),
+    getProfileById: (id) => axios.get(`profile/`,
+        {
+            params: {
+                id: id
+            }
+        }
+    )
 
 };
 
