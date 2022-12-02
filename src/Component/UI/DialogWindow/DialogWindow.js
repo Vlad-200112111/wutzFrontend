@@ -5,15 +5,22 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import {IconButton} from "@mui/material";
+import Slide from '@mui/material/Slide';
 
-export default function DialogWindow({maxWidth, fullWidth, open, content, dialogTitle, title, handleClose}) {
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export default function DialogWindow({maxWidth, fullWidth, open, content, dialogTitle, title, handleClose, fullScreen = false}) {
 
     return (
         <Dialog
+            fullScreen={fullScreen}
             fullWidth={fullWidth}
             maxWidth={maxWidth}
             open={open}
             onClose={handleClose}
+            TransitionComponent={Transition}
         >
             <DialogTitle>
                 {dialogTitle}

@@ -13,14 +13,14 @@ function PrivateRoute({children, ...rest}) {
                 if (resp.status === 200) {
                     setRedirect(false)
                 } else {
-                    // localStorage.remove("access-token")
-                    // localStorage.remove("refresh-token")
+                    localStorage.remove("access-token")
+                    localStorage.remove("refresh-token")
                     setRedirect(true)
                 }
             }
         ).catch(resp => {
-                // localStorage.remove("access-token")
-                // localStorage.remove("refresh-token")
+                localStorage.remove("access-token")
+                localStorage.remove("refresh-token")
                 setRedirect(true)
             }
         )

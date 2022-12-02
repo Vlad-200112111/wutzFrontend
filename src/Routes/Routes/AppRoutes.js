@@ -3,8 +3,8 @@ import {Routes, Route} from "react-router-dom";
 import GuestRoute from "../Components/GuestRoute/GuestRoute";
 import MainPage from "../../Component/General/MainPage/MainPage";
 import MainMenu from "../../Component/General/MainMenu/MainMenu";
-import Profile from "../../Component/General/Profile/Profile";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
+import News from "../../Component/Admin/News/News";
 
 
 function AppRoutes() {
@@ -19,10 +19,10 @@ function AppRoutes() {
                 }
             />
             <Route
-                path="/profile/"
+                path="/news/"
                 element={
                     <PrivateRoute>
-                        <MainMenu content={<Profile/>}/>
+                        <MainMenu content={<News/>}/>
                     </PrivateRoute>
                 }
             />
