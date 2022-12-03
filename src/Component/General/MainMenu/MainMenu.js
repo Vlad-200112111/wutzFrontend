@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -6,7 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,14 +18,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import {useEffect, useState} from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Link} from "react-router-dom";
 import DialogWindow from "../../UI/DialogWindow/DialogWindow";
 import {Grid} from "@mui/material";
-import Logo from "./../../../Assets/Images/logo.png"
 import CustomInput from "../../UI/CustomInput/CustomInput";
 import CustomButton from "../../UI/CustomButton/CustomButton";
 import api from "../../../Services/api";
@@ -77,18 +75,57 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
 }));
 
-export default function MainMenu({content}) {
+export default function MainMenu({isAuthorized, content}) {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [isAuthorized, setIsAuthorized] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
+    const [scroll, setScroll] = useState(0);
+    const [isMainPage, setIsMainPage] = useState(window.location.pathname === '/');
+    const [styleHeader, setStyleHeader] = useState({
+            background: "rgba(57,95,182,0)",
+            borderBottom: "1px solid #fff",
+            boxShadow: 0,
+            height: 70
+        }
+    )
 
-    useEffect(async () => {
+    window.addEventListener("scroll", function (event) {
+            setScroll(this.scrollY)
+        }
+    )
 
-
-    },[])
+    useEffect(() => {
+        if(isMainPage){
+            if(scroll > 0){
+                setStyleHeader(
+                    {
+                        background: "#395fb6",
+                        height: 70,
+                        transition: "all 200ms"
+                    }
+                )
+            } else {
+                setStyleHeader(
+                    {
+                        background: "rgba(57,95,182,0)",
+                        borderBottom: "1px solid #fff",
+                        boxShadow: 0,
+                        height: 70,
+                        transition: "all 200ms"
+                    }
+                )
+            }
+        } else {
+            setStyleHeader(
+                {
+                    background: "#395fb6",
+                    height: 70,
+                    transition: "all 200ms"
+                }
+            )
+        }
+    }, [scroll, isMainPage])
 
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
@@ -106,8 +143,8 @@ export default function MainMenu({content}) {
         setOpen(false);
     };
 
-    const handleChange = (event) => {
-        setAuth(event.target.checked);
+    const Logout = () => {
+        setAnchorEl(null);
     };
 
     const handleMenu = (event) => {
@@ -118,7 +155,7 @@ export default function MainMenu({content}) {
         setAnchorEl(null);
     };
 
-    async function LoginFunction(event){
+    async function LoginFunction(event) {
         event.preventDefault()
         const formData = new FormData(event.target)
         const {data: jwt} = await api.account.login(formData)
@@ -126,6 +163,7 @@ export default function MainMenu({content}) {
         localStorage.setItem('refresh-token', jwt.refresh)
         setOpenDialog(false)
     }
+
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -136,7 +174,7 @@ export default function MainMenu({content}) {
                 maxWidth={'xs'}
                 dialogTitle="Авторизация"
                 content={
-                    <Box sx={{p:5, width: '100%'}}>
+                    <Box sx={{p: 5, width: '100%'}}>
                         <form onSubmit={LoginFunction}>
                             <Grid
                                 container
@@ -174,8 +212,10 @@ export default function MainMenu({content}) {
                 }
             />
             <CssBaseline/>
-            <AppBar sx={{background: "rgba(57,95,182,0)", borderBottom: "1px solid #fff", boxShadow: 0, height: 70}}
-                    position="fixed" open={open}>
+            <AppBar
+                sx={styleHeader}
+                position="fixed"
+                open={open}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -186,46 +226,50 @@ export default function MainMenu({content}) {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <div sx={{flexGrow: 1}}>
-                        <Link style={{color: "#fff", textDecoration: "none"}} to="/about">О ВУЦ</Link>
-                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/schedule">Расписание
-                            занятий</Link>
-                    </div>
-                    {
-                        isAuthorized ?
-                            <div>
-                                <IconButton
-                                    size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    onClick={handleMenu}
-                                    color="inherit"
-                                >
-                                    <AccountCircle/>
-                                </IconButton>
-                                <Menu
-                                    id="menu-appbar"
-                                    anchorEl={anchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleClose}
-                                >
-                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                                </Menu>
-                            </div>
-                            :
-                            <div onClick={handleClickOpenDialog}>Войти</div>
-                    }
+                    <Box sx={{flexGrow: 1}}>
+                        <Link style={{color: "#fff", textDecoration: "none"}} to="/news">О ВУЦ</Link>
+                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/schedule">
+                            Расписание занятий
+                        </Link>
+                    </Box>
+                    <Box style={{float: "right"}}>
+                        {
+                            isAuthorized ?
+                                <div>
+                                    <IconButton
+                                        size="large"
+                                        aria-label="account of current user"
+                                        aria-controls="menu-appbar"
+                                        aria-haspopup="true"
+                                        onClick={handleMenu}
+                                        color="inherit"
+                                    >
+                                        <AccountCircle/>
+                                    </IconButton>
+                                    <Menu
+                                        id="menu-appbar"
+                                        anchorEl={anchorEl}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                    >
+                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                                        <MenuItem onClick={Logout}>Выйти</MenuItem>
+                                    </Menu>
+                                </div>
+                                :
+                                <div onClick={handleClickOpenDialog}>Войти</div>
+                        }
+                    </Box>
                 </Toolbar>
             </AppBar>
             <Drawer

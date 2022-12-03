@@ -7,7 +7,8 @@ function CustomButton({title, type, ...restProps}) {
         <Button
             variant="contained"
             type={type}
-            className={"button"}>
+            className={"button"}
+            {...restProps}>
             {title}
         </Button>
     );

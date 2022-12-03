@@ -13,7 +13,7 @@ import CustomButton from "../../UI/CustomButton/CustomButton";
 import News from "../../General/MainPage/Items/News/News";
 
 
-function NewsAdmin() {
+function NewsAdmin({isAuthorized}) {
     const [openDialog, setOpenDialog] = useState(false);
     const [html, setHtml] = useState(``);
     const [news, setNews] = useState([])
@@ -28,7 +28,7 @@ function NewsAdmin() {
 
     const getNews = async (limit) => {
         const {data: News} = await api.news.getNewsByLimit(limit)
-        return News
+        return News.results
     }
 
     async function addNews(event) {
@@ -37,12 +37,14 @@ function NewsAdmin() {
         formData.append("html", html)
         console.log(formData.get("html"));
         await api.news.addNews(formData)
-        setOpenDialog(false)
+        // setOpenDialog(false)
     }
 
     useEffect(() => {
         getNews(5).then((News) => setNews(News));
     }, [])
+
+    console.log(news)
 
     return (
         <>
@@ -108,7 +110,7 @@ function NewsAdmin() {
                 functionOpenIconSpeedDial={handleOpenDialog}
                 speedDialIcon={<PlaylistAddIcon/>}/>
             <Box sx={{m: 4}}>
-                <News data={news}/>
+                <News setNews={setNews} data={news} isAuthorized={isAuthorized}/>
             </Box>
         </>
     );

@@ -3,14 +3,19 @@ import Slider from "../../UI/Slider/Slider";
 import {Box, Grid} from "@mui/material";
 import News from "./Items/News/News";
 import Contacts from "./Items/Contacts/Contacts";
+import api from "../../../Services/api";
 
-function MainPage({}) {
+function MainPage({isAuthorized}) {
     const [news, setNews] = useState([])
 
-    useEffect(() => {
-        setNews([])
-    }, [])
+    const getNews = async (limit) => {
+        const {data: News} = await api.news.getNewsByLimit(limit)
+        return News.results
+    }
 
+    useEffect(() => {
+        getNews(5).then((News) => setNews(News));
+    }, [])
 
     return (
         <div>
@@ -25,7 +30,7 @@ function MainPage({}) {
                     spacing={3}
                 >
                     <Grid item xs={12} sm={6} md={8}>
-                        <News data={news}/>
+                        <News setNews={setNews} data={news} isAuthorized={isAuthorized}/>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Contacts/>

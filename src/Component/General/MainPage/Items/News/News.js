@@ -2,15 +2,17 @@ import React from 'react';
 import Heading from "../../../../UI/Heading/Heading";
 import Cart from "../../../../UI/Carts/Cart";
 
-function News({data}) {
-    console.log(data.results)
+function News({data, isAuthorized, setNews}) {
     return (
         <>
             <Heading title={"Новости"}/>
             {
-                data.results?.map((item, index) => {
+                data?.map((item, index) => {
                         return (
                             <Cart
+                                setNews={setNews}
+                                id={item.id}
+                                isAuthorized={isAuthorized}
                                 title={item.name}
                                 description={item.caption}
                                 url={item.url_image}

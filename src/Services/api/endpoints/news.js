@@ -20,7 +20,8 @@ const endpoints = {
                 limit: limit
             }
         }
-    )
+    ),
+    deleteNews: (id) => axios.delete(`news/${id}`),
 };
 
 export default endpoints;
