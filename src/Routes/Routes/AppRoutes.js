@@ -4,7 +4,7 @@ import GuestRoute from "../Components/GuestRoute/GuestRoute";
 import MainPage from "../../Component/General/MainPage/MainPage";
 import MainMenu from "../../Component/General/MainMenu/MainMenu";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
-import News from "../../Component/Admin/News/News";
+import NewsAdmin from "../../Component/Admin/NewsAdmin/NewsAdmin";
 
 
 function AppRoutes() {
@@ -22,7 +22,7 @@ function AppRoutes() {
                 path="/news/"
                 element={
                     <PrivateRoute>
-                        <MainMenu content={<News/>}/>
+                        <MainMenu content={<NewsAdmin/>}/>
                     </PrivateRoute>
                 }
             />

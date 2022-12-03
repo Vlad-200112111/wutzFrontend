@@ -3,16 +3,17 @@ import Heading from "../../../../UI/Heading/Heading";
 import Cart from "../../../../UI/Carts/Cart";
 
 function News({data}) {
+    console.log(data.results)
     return (
         <>
             <Heading title={"Новости"}/>
             {
-                data.map((item, index) => {
+                data.results?.map((item, index) => {
                         return (
                             <Cart
-                                title={item.title}
-                                description={item.description}
-                                url={item.url}
+                                title={item.name}
+                                description={item.caption}
+                                url={item.url_image}
                                 key={index}/>
                         )
                     }

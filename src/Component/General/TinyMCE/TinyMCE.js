@@ -1,5 +1,8 @@
 import React, {useRef} from 'react';
 import {Editor} from "@tinymce/tinymce-react";
+import "./../../UI/CustomButton/Button.css"
+import {Box, Button} from "@mui/material";
+import CustomButton from "../../UI/CustomButton/CustomButton";
 
 function TinyMce({showButtonForForm, titleButton, setHtml}) {
     const editorRef = useRef(null);
@@ -33,16 +36,17 @@ function TinyMce({showButtonForForm, titleButton, setHtml}) {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
             />
-            {
-                showButtonForForm &&
-                <button
-                    type="submit"
-                    onClick={log}>
-                    {
-                        titleButton
-                    }
-                </button>
-            }
+            <Box style={{margin: 20, float: "right"}}>
+                {
+                    showButtonForForm &&
+                    <CustomButton
+                        type="submit"
+                        onClick={log}
+                        title={"Добавить"}
+                    />
+                }
+            </Box>
+
         </>
     );
 }

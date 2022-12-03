@@ -3,26 +3,12 @@ import Slider from "../../UI/Slider/Slider";
 import {Box, Grid} from "@mui/material";
 import News from "./Items/News/News";
 import Contacts from "./Items/Contacts/Contacts";
-import Slide1 from "./../../../Assets/Images/Slide1.jpg"
 
 function MainPage({}) {
     const [news, setNews] = useState([])
 
     useEffect(() => {
-        setNews(
-            [
-                {
-                    title: 'News',
-                    url: Slide1,
-                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'
-                },
-                {
-                    title: 'News',
-                    url: Slide1,
-                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'
-                },
-            ]
-        )
+        setNews([])
     }, [])
 
 

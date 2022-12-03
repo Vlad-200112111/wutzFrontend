@@ -17,7 +17,8 @@ function Cart({url, title, description, key}) {
                     spacing={1}
                 >
                     <Grid item xs={5}>
-                        <div className="cart-image" style={{backgroundImage: `url(${url})`}}/>
+                        <img className="cart-image" src={url}/>
+                        {/*<div className="cart-image" style={{backgroundImage: `url(${url})`}}/>*/}
                     </Grid>
                     <Grid item xs={7}>
                         <div style={{marginBottom: 25}}>

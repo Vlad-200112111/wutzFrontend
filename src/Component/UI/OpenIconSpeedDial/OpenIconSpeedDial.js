@@ -6,10 +6,9 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 function OpenIconSpeedDial({actions, is_show, speedDialIcon, functionOpenIconSpeedDial}) {
     return (
-        <Box sx={{height: 320, transform: 'translateZ(0px)', flexGrow: 1}}>
             <SpeedDial
                 onClick={functionOpenIconSpeedDial}
-                sx={{position: 'absolute', bottom: 16, right: 16}}
+                sx={{position: 'fixed', bottom: 16, right: 16}}
                 icon={<SpeedDialIcon openIcon={speedDialIcon}/>}
                 ariaLabel={'SpeedDial'}>
                 {
@@ -26,7 +25,6 @@ function OpenIconSpeedDial({actions, is_show, speedDialIcon, functionOpenIconSpe
                     )
                 }
             </SpeedDial>
-        </Box>
     );
 }
 
