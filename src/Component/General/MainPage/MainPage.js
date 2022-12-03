@@ -4,6 +4,7 @@ import {Box, Grid} from "@mui/material";
 import News from "./Items/News/News";
 import Contacts from "./Items/Contacts/Contacts";
 import api from "../../../Services/api";
+import {isMobile} from 'react-device-detect';
 
 function MainPage({isAuthorized}) {
     const [news, setNews] = useState([])
@@ -17,10 +18,15 @@ function MainPage({isAuthorized}) {
         getNews(5).then((News) => setNews(News));
     }, [])
 
+
     return (
         <div>
 
-            <Slider autoPlay={true} autoPlayTime={7000}/>
+            {
+                !isMobile && (
+                    <Slider autoPlay={true} autoPlayTime={7000}/>
+                )
+            }
             <Box sx={{pr: 5, pl: 5}}>
                 <Grid
                     container

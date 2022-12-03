@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Box, Grid, Stack, Typography} from "@mui/material";
-import "./Cart.css"
+import "./CustomCartsNews.css"
 import CustomIconButton from "../CustomIconButton/CustomIconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,7 +8,7 @@ import DialogWindow from "../DialogWindow/DialogWindow";
 import CustomButton from "../CustomButton/CustomButton";
 import api from "../../../Services/api";
 
-function Cart({id, url, title, description, key, isAuthorized, setNews}) {
+function CustomCartsNews({id, url, title, description, key, isAuthorized, setNews}) {
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleCloseDialog = () => {
@@ -88,4 +88,4 @@ function Cart({id, url, title, description, key, isAuthorized, setNews}) {
     );
 }
 
-export default Cart;
+export default CustomCartsNews;

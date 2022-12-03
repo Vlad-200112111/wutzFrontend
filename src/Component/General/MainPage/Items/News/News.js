@@ -1,6 +1,6 @@
 import React from 'react';
 import Heading from "../../../../UI/Heading/Heading";
-import Cart from "../../../../UI/Carts/Cart";
+import CustomCartsNews from "../../../../UI/CustomCartsNews/CustomCartsNews";
 
 function News({data, isAuthorized, setNews}) {
     return (
@@ -9,7 +9,7 @@ function News({data, isAuthorized, setNews}) {
             {
                 data?.map((item, index) => {
                         return (
-                            <Cart
+                            <CustomCartsNews
                                 setNews={setNews}
                                 id={item.id}
                                 isAuthorized={isAuthorized}

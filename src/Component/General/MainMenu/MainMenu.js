@@ -27,6 +27,7 @@ import {Grid} from "@mui/material";
 import CustomInput from "../../UI/CustomInput/CustomInput";
 import CustomButton from "../../UI/CustomButton/CustomButton";
 import api from "../../../Services/api";
+import {isMobile} from 'react-device-detect';
 
 const drawerWidth = 240;
 
@@ -96,8 +97,8 @@ export default function MainMenu({isAuthorized, content}) {
     )
 
     useEffect(() => {
-        if(isMainPage){
-            if(scroll > 0){
+        if (isMainPage) {
+            if (scroll > 0) {
                 setStyleHeader(
                     {
                         background: "#395fb6",
@@ -116,6 +117,14 @@ export default function MainMenu({isAuthorized, content}) {
                     }
                 )
             }
+        } else if (!isMobile) {
+            setStyleHeader(
+                {
+                    background: "#395fb6",
+                    height: 70,
+                    transition: "all 200ms"
+                }
+            )
         } else {
             setStyleHeader(
                 {
@@ -227,7 +236,7 @@ export default function MainMenu({isAuthorized, content}) {
                         <MenuIcon/>
                     </IconButton>
                     <Box sx={{flexGrow: 1}}>
-                        <Link style={{color: "#fff", textDecoration: "none"}} to="/news">О ВУЦ</Link>
+                        <Link style={{color: "#fff", textDecoration: "none"}} to="/about">О ВУЦ</Link>
                         <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/schedule">
                             Расписание занятий
                         </Link>

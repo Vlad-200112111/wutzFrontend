@@ -36,7 +36,7 @@ function NewsAdmin({isAuthorized}) {
         formData.append("html", html)
         console.log(formData.get("html"));
         await api.news.addNews(formData)
-        // setOpenDialog(false)
+        setOpenDialog(false)
     }
 
     useEffect(() => {

@@ -1,8 +1,10 @@
 import React from 'react';
 
-function SliderAdmin(props) {
+function SliderAdmin({isAuthorized}) {
     return (
-        <div></div>
+        <>
+        
+        </>
     );
 }
 

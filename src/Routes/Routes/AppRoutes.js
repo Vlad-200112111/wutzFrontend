@@ -7,6 +7,9 @@ import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 import NewsAdmin from "../../Component/Admin/NewsAdmin/NewsAdmin";
 import api from "../../Services/api";
 import AboutPage from "../../Component/General/About/AboutPage";
+import SliderAdmin from "../../Component/Admin/SliderAdmin/SliderAdmin";
+import PagesAdmin from "../../Component/Admin/PagesAdmin/PagesAdmin";
+import Pages from "../../Component/General/Pages/Pages";
 
 
 function AppRoutes() {
@@ -50,8 +53,32 @@ function AppRoutes() {
             <Route
                 path="/about/"
                 element={
-                    <GuestRoute>
+                    <PrivateRoute>
                         <MainMenu isAuthorized={isAuthorized} content={<AboutPage isAuthorized={isAuthorized}/>}/>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/sliders/"
+                element={
+                    <PrivateRoute>
+                        <MainMenu isAuthorized={isAuthorized} content={<SliderAdmin isAuthorized={isAuthorized}/>}/>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/pages/"
+                element={
+                    <PrivateRoute>
+                        <MainMenu isAuthorized={isAuthorized} content={<PagesAdmin isAuthorized={isAuthorized}/>}/>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/pages/:id"
+                element={
+                    <GuestRoute>
+                        <MainMenu isAuthorized={isAuthorized} content={<Pages isAuthorized={isAuthorized}/>}/>
                     </GuestRoute>
                 }
             />
