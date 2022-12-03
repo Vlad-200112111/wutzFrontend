@@ -9,7 +9,6 @@ import CustomInput from "../../UI/CustomInput/CustomInput";
 import TinyMce from "../../General/TinyMCE/TinyMCE";
 import CustomInputFile from "../../UI/CustomInputFile/CustomInputFile";
 import api from "../../../Services/api";
-import CustomButton from "../../UI/CustomButton/CustomButton";
 import News from "../../General/MainPage/Items/News/News";
 
 

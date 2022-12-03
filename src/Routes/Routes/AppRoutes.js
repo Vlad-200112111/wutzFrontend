@@ -6,6 +6,7 @@ import MainMenu from "../../Component/General/MainMenu/MainMenu";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
 import NewsAdmin from "../../Component/Admin/NewsAdmin/NewsAdmin";
 import api from "../../Services/api";
+import AboutPage from "../../Component/General/About/AboutPage";
 
 
 function AppRoutes() {
@@ -44,6 +45,14 @@ function AppRoutes() {
                     <PrivateRoute>
                         <MainMenu isAuthorized={isAuthorized} content={<NewsAdmin isAuthorized={isAuthorized}/>}/>
                     </PrivateRoute>
+                }
+            />
+            <Route
+                path="/about/"
+                element={
+                    <GuestRoute>
+                        <MainMenu isAuthorized={isAuthorized} content={<AboutPage isAuthorized={isAuthorized}/>}/>
+                    </GuestRoute>
                 }
             />
         </Routes>

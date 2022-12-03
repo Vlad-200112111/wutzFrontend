@@ -4,7 +4,7 @@ import "./../../UI/CustomButton/Button.css"
 import {Box, Button} from "@mui/material";
 import CustomButton from "../../UI/CustomButton/CustomButton";
 
-function TinyMce({showButtonForForm, titleButton, setHtml}) {
+function TinyMce({showButtonForForm, titleButton, setHtml, html}) {
     const editorRef = useRef(null);
 
 
@@ -18,8 +18,9 @@ function TinyMce({showButtonForForm, titleButton, setHtml}) {
     return (
         <>
             <Editor
+                required
                 onInit={(evt, editor) => editorRef.current = editor}
-                initialValue={''}
+                initialValue={html}
                 init={{
                     language: 'ru',
                     height: 500,
