@@ -12,7 +12,10 @@ const endpoints = {
             return "ERROR"
         }
     ),
+    updatePage: (id, data) => axios.put(`page/${id}`, data),
     getPages: () => axios.get("page/"),
+    getPage: (id) => axios.get(`page/${id}`),
+    deletePage: (id) => axios.delete(`page/${id}`),
 };
 
 export default endpoints;

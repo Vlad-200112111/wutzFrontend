@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import OpenIconSpeedDial from "../../UI/OpenIconSpeedDial/OpenIconSpeedDial";
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import Box from "@mui/material/Box";
 import CustomAlert from "../../UI/CustomAlert/CustomAlert";
 import {Grid, Typography, Stack, ListItem, ListItemText} from "@mui/material";
@@ -14,10 +13,12 @@ import CustomIconButton from "../../UI/CustomIconButton/CustomIconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomAutocomplete from "../../UI/CustomAutocomplete/CustomAutocomplete";
+import { useNavigate } from "react-router-dom";
 
 function PagesAdmin({isAuthorized}) {
+    const navigate = useNavigate();
     const [openDialog, setOpenDialog] = useState(false);
-    const [openDialogForConfirmCategory, setOpenDialogForConfirmCategory] = useState(false);
+    const [openDialogForConfirm, setOpenDialogForConfirm] = useState(false);
     const [openDialogCategory, setOpenDialogCategory] = useState(false);
     const [html, setHtml] = useState(``);
     const [categoriesRef, setCategoriesRef] = useState()
@@ -27,7 +28,14 @@ function PagesAdmin({isAuthorized}) {
     const [idCategory, setIdCategory] = useState('')
     const [nameCategory, setNameCategory] = useState('')
     const [captionCategory, setCaptionCategory] = useState('')
+    const [idPage, setIdPage] = useState('')
+    const [namePage, setNamePage] = useState('')
+    const [captionPage, setCaptionPage] = useState('')
+    const [categoryPage, setCategoryPage] = useState('')
+    const [htmlPage, setHtmlPage] = useState('')
     const [isEditCategory, setIsEditCategory] = useState(false);
+    const [isEditPage, setIsEditPage] = useState(false);
+    const [confirmDeletePage, setConfirmDeletePage] = useState(false);
 
     useEffect(() => {
         getCategoriesForPage().then((Categories) => {
@@ -48,11 +56,18 @@ function PagesAdmin({isAuthorized}) {
         return Pages.results
     }
 
-    const deleteCategory = async () => {
-        await api.pages.deleteCategoryForPage(idCategory)
-        setOpenDialogForConfirmCategory(false)
-        const {data: Categories} = await api.pages.getCategoryForPage()
-        setCategories(Categories.results)
+    const deleteItem = async () => {
+        if(confirmDeletePage){
+            await api.pages.deletePage(idPage)
+            const {data: Pages} = await api.pages.getPages()
+            setPages(Pages.results)
+        } else {
+            await api.pages.deleteCategoryForPage(idCategory)
+            const {data: Categories} = await api.pages.getCategoryForPage()
+            setCategories(Categories.results)
+        }
+        setConfirmDeletePage(false)
+        setOpenDialogForConfirm(false)
     }
 
     const functionCategoryForPage = async (event) => {
@@ -72,38 +87,54 @@ function PagesAdmin({isAuthorized}) {
         setOpenDialogCategory(false)
     }
 
-    async function addPage(event) {
+    async function functionPage(event) {
         event.preventDefault();
         const formData = new FormData(event.target)
         formData.append("html", html)
         formData.append("category", chosenCategory)
-        await api.pages.addPage(formData)
+        if (isEditPage) {
+            await api.pages.updatePage(idPage, formData)
+            setNamePage('')
+            setIdPage('')
+            setCaptionPage('')
+            setHtmlPage('')
+            setCategoryPage('')
+            setIsEditPage(false)
+        } else {
+            await api.pages.addPage(formData)
+        }
         const {data: Pages} = await api.pages.getPages()
         setPages(Pages.results)
         setOpenDialog(false)
     }
 
-
     return (
         <>
             <DialogWindow
-                open={openDialogForConfirmCategory}
+                open={openDialogForConfirm}
                 maxWidth={'xs'}
                 handleClose={() => {
-                    setOpenDialogForConfirmCategory(false)
+                    setOpenDialogForConfirm(false)
                     setIdCategory('')
+                    setIdPage('')
+                    setConfirmDeletePage(false)
                 }}
                 dialogTitle="Подтверждение удаления"
                 content={
                     <Box sx={{p: 1, width: '100%'}}>
                         <Typography variant="body1" align={"justify"} gutterBottom>
-                            Действительно ли Вы собираетесь удалить категорию страницы? Для подтверждения удаления
+                            Действительно ли Вы собираетесь удалить? Для подтверждения удаления
                             нажмите на
                             кнопку "Удалить".
                         </Typography>
                         <Stack sx={{mt: 3, float: "right"}} direction="row" spacing={2}>
-                            <CustomButton onClick={deleteCategory} title={"Удалить"}/>
-                            <CustomButton onClick={() => setOpenDialogForConfirmCategory(false)} title={"Отмена"}/>
+                            <CustomButton onClick={deleteItem} title={"Удалить"}/>
+                            <CustomButton
+                                onClick={() => {
+                                    setOpenDialogForConfirm(false)
+                                    setConfirmDeletePage(false)
+                                }}
+                                title={"Отмена"}/>
                         </Stack>
                     </Box>
                 }
@@ -175,7 +206,15 @@ function PagesAdmin({isAuthorized}) {
             <DialogWindow
                 fullScreen={true}
                 open={openDialog}
-                handleClose={() => setOpenDialog(false)}
+                handleClose={() => {
+                    setNamePage('')
+                    setIdPage('')
+                    setCaptionPage('')
+                    setHtmlPage('')
+                    setCategoryPage('')
+                    setIsEditPage(false)
+                    setOpenDialog(false)
+                }}
                 dialogTitle="Создание страницы"
                 content={
                     <Box sx={{p: 5, width: '100%'}}>
@@ -185,7 +224,7 @@ function PagesAdmin({isAuthorized}) {
                             content='Информация!'
                             activeAlert={true}
                         />
-                        <form encType="multipart/form-data" onSubmit={addPage}>
+                        <form encType="multipart/form-data" onSubmit={functionPage}>
                             <Grid
                                 container
                                 direction="row"
@@ -203,6 +242,8 @@ function PagesAdmin({isAuthorized}) {
                                             type="text"
                                             helperText="Введите название страницы"
                                             name="name"
+                                            value={namePage}
+                                            onChange={(event) => setNamePage(event.target.value)}
                                         />
                                     </Box>
                                     <Box sx={{m: 2}}>
@@ -214,11 +255,13 @@ function PagesAdmin({isAuthorized}) {
                                             type="text"
                                             helperText="Введите описание страницы"
                                             name="caption"
+                                            value={captionPage}
+                                            onChange={(event) => setCaptionPage(event.target.value)}
                                         />
                                     </Box>
                                     <Box sx={{m: 2}}>
                                         <CustomAutocomplete
-                                            key={'autocomplete languages'}
+                                            key={'autocomplete'}
                                             required={true}
                                             getOptionLabel={(option) => option.name}
                                             onChange={(e, value) => setChosenCategory(value.id)}
@@ -226,14 +269,17 @@ function PagesAdmin({isAuthorized}) {
                                             helperText='Выберите категорию, к которой будет относиться страница'
                                             setRef={setCategoriesRef}
                                             options={categories}
-
-                                            groupBy={(option)=>option.name[0].toUpperCase()}
+                                            groupBy={(option) => option.name[0].toUpperCase()}
                                         />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12} xl={9} md={12}>
                                     <Box sx={{m: 2}}>
-                                        <TinyMce setHtml={setHtml} showButtonForForm={true} titleButton="Добавить"/>
+                                        <TinyMce
+                                            html={htmlPage}
+                                            setHtml={setHtml}
+                                            showButtonForForm={true}
+                                            titleButton={isEditPage ? "Сохранить" : "Добавить"}/>
                                     </Box>
                                 </Grid>
                             </Grid>
@@ -248,7 +294,7 @@ function PagesAdmin({isAuthorized}) {
                     direction="row"
                     justifyContent="center"
                     alignItems="flex-start"
-                    spacing={2}
+                    spacing={5}
                 >
                     <Grid item xs={12} sm={6} md={4}>
                         <Stack>
@@ -279,7 +325,7 @@ function PagesAdmin({isAuthorized}) {
                                                         icon={<DeleteIcon/>}
                                                         caption="Нажмите для того, чтобы удалить!"
                                                         functionIconButton={() => {
-                                                            setOpenDialogForConfirmCategory(true)
+                                                            setOpenDialogForConfirm(true)
                                                             setIdCategory(category.id)
                                                         }}/>
                                                 </Stack>
@@ -318,18 +364,27 @@ function PagesAdmin({isAuthorized}) {
                                                         icon={<EditIcon/>}
                                                         caption="Нажмите для того, чтобы редактировать!"
                                                         functionIconButton={() => {
-                                                            setIsEditCategory(true)
-                                                            setOpenDialogCategory(true)
-                                                            setIdCategory(page.id)
-                                                            setNameCategory(page.name)
-                                                            setCaptionCategory(page.caption)
+                                                            setIsEditPage(true)
+                                                            setOpenDialog(true)
+                                                            setIdPage(page.id)
+                                                            setNamePage(page.name)
+                                                            setCaptionPage(page.caption)
+                                                            setCategoryPage(page.category)
+                                                            setHtmlPage(page.html)
                                                         }}/>
                                                     <CustomIconButton
                                                         icon={<DeleteIcon/>}
                                                         caption="Нажмите для того, чтобы удалить!"
                                                         functionIconButton={() => {
-                                                            setOpenDialogForConfirmCategory(true)
-                                                            setIdCategory(page.id)
+                                                            setOpenDialogForConfirm(true)
+                                                            setConfirmDeletePage(true)
+                                                            setIdPage(page.id)
+                                                        }}/>
+                                                    <CustomIconButton
+                                                        icon={<ViewTimelineIcon/>}
+                                                        caption="Нажмите для того, чтобы посмотреть!"
+                                                        functionIconButton={() => {
+                                                            navigate(`/pages/${page.id}`);
                                                         }}/>
                                                 </Stack>
                                             </ListItem>

@@ -43,7 +43,7 @@ function TinyMce({showButtonForForm, titleButton, setHtml, html}) {
                     <CustomButton
                         type="submit"
                         onClick={log}
-                        title={"Добавить"}
+                        title={titleButton}
                     />
                 }
             </Box>
