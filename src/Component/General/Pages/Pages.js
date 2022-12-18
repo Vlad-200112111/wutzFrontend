@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import api from "../../../Services/api";
 import DialogWindow from "../../UI/DialogWindow/DialogWindow";
-import {Box, Grid, Stack, Typography} from "@mui/material";
+import {Box, FormControlLabel, Grid, Stack, Switch, Typography} from "@mui/material";
 import CustomAlert from "../../UI/CustomAlert/CustomAlert";
 import CustomInput from "../../UI/CustomInput/CustomInput";
 import TinyMce from "../TinyMCE/TinyMCE";
@@ -18,6 +18,7 @@ function Pages({isAuthorized}) {
 
     const [page, setPage] = useState('')
     const [html, setHtml] = useState('');
+    const [checked, setChecked] = React.useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [chosenCategory, setChosenCategory] = useState("")
     const [categories, setCategories] = useState([])
@@ -40,11 +41,13 @@ function Pages({isAuthorized}) {
             setNamePage(Page.name)
             setCaptionPage(Page.caption)
             setPage(Page)
+            setHtml(Page.html)
+            setChecked(Page.is_download)
         })
         getCategoriesForPage().then((Categories) => {
             setCategories(Categories)
         });
-    }, [])
+    }, [idPage])
 
     const openDialogForEditing = () => {
         setOpenDialog(true);
@@ -59,6 +62,7 @@ function Pages({isAuthorized}) {
         const formData = new FormData(event.target)
         formData.append("html", html)
         formData.append("category", chosenCategory)
+        formData.append("is_download", checked)
         await api.pages.updatePage(idPage, formData)
         getPage().then((Page) => setPage(Page))
         setOpenDialog(false)
@@ -101,7 +105,7 @@ function Pages({isAuthorized}) {
                 open={openDialog}
                 handleClose={handleCloseDialog}
                 fullWidth={true}
-                dialogTitle="Редактирование страницы о ВУЦ"
+                dialogTitle="Редактирование страницы"
                 content={
                     <Box sx={{p: 5, width: '100%'}}>
                         <CustomAlert
@@ -146,16 +150,36 @@ function Pages({isAuthorized}) {
                                         />
                                     </Box>
                                     <Box sx={{m: 2}}>
-                                        <CustomAutocomplete
-                                            key={'autocomplete'}
-                                            required={true}
-                                            getOptionLabel={(option) => option.name}
-                                            onChange={(e, value) => setChosenCategory(value.id)}
-                                            label='Категория страницы'
-                                            helperText='Выберите категорию, к которой будет относиться страница'
-                                            options={categories}
-                                            groupBy={(option) => option.name[0].toUpperCase()}
-                                        />
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            spacing={3}
+                                        >
+                                            <Grid item xs={10} xl={10} md={10}>
+                                                <CustomAutocomplete
+                                                    key={'autocomplete'}
+                                                    required={true}
+                                                    getOptionLabel={(option) => option.name}
+                                                    onChange={(e, value) => setChosenCategory(value.id)}
+                                                    label='Категория страницы'
+                                                    helperText='Выберите категорию, к которой будет относиться страница'
+                                                    options={categories}
+                                                    groupBy={(option) => option.name[0].toUpperCase()}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={2} xl={2} md={2}>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch
+                                                            checked={checked}
+                                                            onChange={() => setChecked(!checked)}
+                                                            defaultChecked
+                                                        />}
+                                                    label="Разрешить в PDF"/>
+                                            </Grid>
+                                        </Grid>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12} xl={9} md={12}>
@@ -206,24 +230,28 @@ function Pages({isAuthorized}) {
                                         />
                                     </Box>
                                     <Box sx={{m: 1}}>
-                                        <ReactToPrint
-                                            trigger={() =>
-                                                <Box sx={{
-                                                    background: '#395fb6',
-                                                    width: '100%',
-                                                    borderRadius: '0 !important',
-                                                    cursor: 'pointer',
-                                                    color: '#fff',
-                                                    border: '2px solid #fff',
-                                                    padding: 1,
-                                                    textAlign: 'center',
-                                                }}
-                                                     variant="contained">
-                                                    Отобразить в PDF
-                                                </Box>
-                                            }
-                                            content={() => document.getElementById('htmlForPDF')}
-                                        />
+                                        {
+                                            checked && (
+                                                <ReactToPrint
+                                                    trigger={() =>
+                                                        <Box sx={{
+                                                            background: '#395fb6',
+                                                            width: '100%',
+                                                            borderRadius: '0 !important',
+                                                            cursor: 'pointer',
+                                                            color: '#fff',
+                                                            border: '2px solid #fff',
+                                                            padding: 1,
+                                                            textAlign: 'center',
+                                                        }}
+                                                             variant="contained">
+                                                            Отобразить в PDF
+                                                        </Box>
+                                                    }
+                                                    content={() => document.getElementById('htmlForPDF')}
+                                                />
+                                            )
+                                        }
                                     </Box>
                                 </Box>
                             </Grid>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import Box from "@mui/material/Box";
 import CustomAlert from "../../UI/CustomAlert/CustomAlert";
-import {Grid, Typography, Stack, ListItem, ListItemText} from "@mui/material";
+import {Grid, Typography, Stack, ListItem, ListItemText, FormControlLabel, Switch} from "@mui/material";
 import CustomInput from "../../UI/CustomInput/CustomInput";
 import TinyMce from "../../General/TinyMCE/TinyMCE";
 import DialogWindow from "../../UI/DialogWindow/DialogWindow";
@@ -13,7 +13,7 @@ import CustomIconButton from "../../UI/CustomIconButton/CustomIconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomAutocomplete from "../../UI/CustomAutocomplete/CustomAutocomplete";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function PagesAdmin({isAuthorized}) {
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ function PagesAdmin({isAuthorized}) {
     const [openDialogCategory, setOpenDialogCategory] = useState(false);
     const [html, setHtml] = useState(``);
     const [categoriesRef, setCategoriesRef] = useState()
+    const [checked, setChecked] = React.useState(false);
     const [chosenCategory, setChosenCategory] = useState("")
     const [categories, setCategories] = useState([]);
     const [pages, setPages] = useState([]);
@@ -57,7 +58,7 @@ function PagesAdmin({isAuthorized}) {
     }
 
     const deleteItem = async () => {
-        if(confirmDeletePage){
+        if (confirmDeletePage) {
             await api.pages.deletePage(idPage)
             const {data: Pages} = await api.pages.getPages()
             setPages(Pages.results)
@@ -92,12 +93,14 @@ function PagesAdmin({isAuthorized}) {
         const formData = new FormData(event.target)
         formData.append("html", html)
         formData.append("category", chosenCategory)
+        formData.append("is_download", checked)
         if (isEditPage) {
             await api.pages.updatePage(idPage, formData)
             setNamePage('')
             setIdPage('')
             setCaptionPage('')
             setHtmlPage('')
+            setChecked(false)
             setCategoryPage('')
             setIsEditPage(false)
         } else {
@@ -213,6 +216,7 @@ function PagesAdmin({isAuthorized}) {
                     setHtmlPage('')
                     setCategoryPage('')
                     setIsEditPage(false)
+                    setChecked(false)
                     setOpenDialog(false)
                 }}
                 dialogTitle="Создание страницы"
@@ -260,17 +264,37 @@ function PagesAdmin({isAuthorized}) {
                                         />
                                     </Box>
                                     <Box sx={{m: 2}}>
-                                        <CustomAutocomplete
-                                            key={'autocomplete'}
-                                            required={true}
-                                            getOptionLabel={(option) => option.name}
-                                            onChange={(e, value) => setChosenCategory(value.id)}
-                                            label='Категория страницы'
-                                            helperText='Выберите категорию, к которой будет относиться страница'
-                                            setRef={setCategoriesRef}
-                                            options={categories}
-                                            groupBy={(option) => option.name[0].toUpperCase()}
-                                        />
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            spacing={3}
+                                        >
+                                            <Grid item xs={10} xl={10} md={10}>
+                                                <CustomAutocomplete
+                                                    key={'autocomplete'}
+                                                    required={true}
+                                                    getOptionLabel={(option) => option.name}
+                                                    onChange={(e, value) => setChosenCategory(value.id)}
+                                                    label='Категория страницы'
+                                                    helperText='Выберите категорию, к которой будет относиться страница'
+                                                    setRef={setCategoriesRef}
+                                                    options={categories}
+                                                    groupBy={(option) => option.name[0].toUpperCase()}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={2} xl={2} md={2}>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch
+                                                            checked={checked}
+                                                            onChange={() => setChecked(!checked)}
+                                                            defaultChecked
+                                                        />}
+                                                    label="Разрешить в PDF"/>
+                                            </Grid>
+                                        </Grid>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={12} xl={9} md={12}>
@@ -371,6 +395,7 @@ function PagesAdmin({isAuthorized}) {
                                                             setCaptionPage(page.caption)
                                                             setCategoryPage(page.category)
                                                             setHtmlPage(page.html)
+                                                            setChecked(page.is_download)
                                                         }}/>
                                                     <CustomIconButton
                                                         icon={<DeleteIcon/>}

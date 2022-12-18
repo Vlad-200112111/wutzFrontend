@@ -14,16 +14,13 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Link} from "react-router-dom";
 import DialogWindow from "../../UI/DialogWindow/DialogWindow";
-import {Grid} from "@mui/material";
+import {Grid, Typography} from "@mui/material";
 import CustomInput from "../../UI/CustomInput/CustomInput";
 import CustomButton from "../../UI/CustomButton/CustomButton";
 import api from "../../../Services/api";
@@ -82,6 +79,8 @@ export default function MainMenu({isAuthorized, content}) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [scroll, setScroll] = useState(0);
+    const [categoriesAndPages, setCategoriesAndPages] = useState([]);
+    const [IsAuthorized, setIsAuthorized] = useState(isAuthorized);
     const [isMainPage, setIsMainPage] = useState(window.location.pathname === '/');
     const [styleHeader, setStyleHeader] = useState({
             background: "rgba(57,95,182,0)",
@@ -95,6 +94,12 @@ export default function MainMenu({isAuthorized, content}) {
             setScroll(this.scrollY)
         }
     )
+
+    useEffect(() => {
+        getPages().then((Pages) => {
+            setCategoriesAndPages(Pages)
+        });
+    }, [])
 
     useEffect(() => {
         if (isMainPage) {
@@ -136,6 +141,12 @@ export default function MainMenu({isAuthorized, content}) {
         }
     }, [scroll, isMainPage])
 
+
+    const getPages = async () => {
+        const {data: Pages} = await api.pages.getCategoriesAndPages()
+        return Pages.results
+    }
+
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -152,7 +163,9 @@ export default function MainMenu({isAuthorized, content}) {
         setOpen(false);
     };
 
-    const Logout = () => {
+    const Logout = async () => {
+        await api.account.logout()
+        setIsAuthorized(false)
         setAnchorEl(null);
     };
 
@@ -171,6 +184,7 @@ export default function MainMenu({isAuthorized, content}) {
         localStorage.setItem('access-token', jwt.access)
         localStorage.setItem('refresh-token', jwt.refresh)
         setOpenDialog(false)
+        setIsAuthorized(true)
     }
 
 
@@ -236,14 +250,19 @@ export default function MainMenu({isAuthorized, content}) {
                         <MenuIcon/>
                     </IconButton>
                     <Box sx={{flexGrow: 1}}>
-                        <Link style={{color: "#fff", textDecoration: "none"}} to="/about">О ВУЦ</Link>
-                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/schedule">
-                            Расписание занятий
+                        <Link style={{color: "#fff", textDecoration: "none"}} to="/">
+                            Главная
+                        </Link>
+                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/about">
+                            О ВУЦ
+                        </Link>
+                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/materials">
+                            Материалы
                         </Link>
                     </Box>
                     <Box style={{float: "right"}}>
                         {
-                            isAuthorized ?
+                            IsAuthorized ?
                                 <div>
                                     <IconButton
                                         size="large"
@@ -300,30 +319,66 @@ export default function MainMenu({isAuthorized, content}) {
                     </IconButton>
                 </DrawerHeader>
                 <Divider/>
+                {
+                    IsAuthorized && (
+                        <>
+                            <Typography sx={{ml: 1, fontWeight: 'bold', mt: 1}} variant="body1" gutterBottom>
+                                Администрирование
+                            </Typography>
+                            <List>
+                                <Link to={`/news`} style={{color: "#000000", textDecoration: "none"}}>
+                                    <ListItem disablePadding>
+                                        <ListItemButton>
+                                            <ListItemText primary="Создание новостей"/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                </Link>
+                                <Link to={`/pages`} style={{color: "#000000", textDecoration: "none"}}>
+                                    <ListItem disablePadding>
+                                        <ListItemButton>
+                                            <ListItemText primary="Создание страниц"/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                </Link>
+                            </List>
+                            <Divider/>
+                        </>
+                    )
+                }
+                {
+                    categoriesAndPages?.map((item, index) =>
+                        <>
+                            <Typography sx={{ml: 1, fontWeight: 'bold', mt: 1}} variant="body1" gutterBottom>
+                                {item.name}
+                            </Typography>
+                            <List key={index}>
+                                {
+                                    item.pages?.map((itemPage, i) =>
+                                        <Link to={`/pages/${itemPage.id}`} style={{color: "#000000", textDecoration: "none"}}>
+                                            <ListItem key={i} disablePadding>
+                                                <ListItemButton>
+                                                    <ListItemText primary={itemPage.name}/>
+                                                </ListItemButton>
+                                            </ListItem>
+                                        </Link>
+                                    )
+                                }
+                            </List>
+                            <Divider/>
+                        </>
+                    )
+                }
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                                </ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider/>
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
-                                </ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
+                    {/*{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
+                    {/*    <ListItem key={text} disablePadding>*/}
+                    {/*        <ListItemButton>*/}
+                    {/*            <ListItemIcon>*/}
+                    {/*                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}*/}
+                    {/*            </ListItemIcon>*/}
+                    {/*            <ListItemText primary={text}/>*/}
+                    {/*        </ListItemButton>*/}
+                    {/*    </ListItem>*/}
+                    {/*))}*/}
                 </List>
             </Drawer>
             <Main sx={{p: 0}} open={open}>

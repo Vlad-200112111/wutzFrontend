@@ -17,6 +17,7 @@ const endpoints = {
             token: data
         }
     ),
+    logout: () => axios.post("logout/", {refresh: localStorage.getItem('refresh-token')}),
     getProfileList: () => axios.get('profile/').catch(() => {
         return "ERROR"
     }),

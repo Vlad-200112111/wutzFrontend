@@ -8,6 +8,7 @@ const endpoints = {
     updateCategoryForPage: (id, data) => axios.put(`category-for-page/${id}`, data),
     deleteCategoryForPage: (id) => axios.delete(`category-for-page/${id}`),
     getCategoryForPage: () => axios.get("category-for-page/"),
+    getCategoriesAndPages: () => axios.get("categories-and-pages/"),
     addPage: (data) => axios.post("page/create/", data).catch(() => {
             return "ERROR"
         }

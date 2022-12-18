@@ -10,6 +10,7 @@ import AboutPage from "../../Component/General/About/AboutPage";
 import SliderAdmin from "../../Component/Admin/SliderAdmin/SliderAdmin";
 import PagesAdmin from "../../Component/Admin/PagesAdmin/PagesAdmin";
 import Pages from "../../Component/General/Pages/Pages";
+import MaterialPage from "../../Component/General/Material/MaterialPage";
 
 
 function AppRoutes() {
@@ -79,6 +80,14 @@ function AppRoutes() {
                 element={
                     <GuestRoute>
                         <MainMenu isAuthorized={isAuthorized} content={<Pages isAuthorized={isAuthorized}/>}/>
+                    </GuestRoute>
+                }
+            />
+            <Route
+                path="/materials/"
+                element={
+                    <GuestRoute>
+                        <MainMenu isAuthorized={isAuthorized} content={<MaterialPage isAuthorized={isAuthorized}/>}/>
                     </GuestRoute>
                 }
             />
