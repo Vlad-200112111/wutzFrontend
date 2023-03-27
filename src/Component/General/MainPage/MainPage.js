@@ -5,6 +5,8 @@ import News from "./Items/News/News";
 import Contacts from "./Items/Contacts/Contacts";
 import api from "../../../Services/api";
 import {isMobile} from 'react-device-detect';
+import PermissionsGate from "../../../Permissions/PermissionsGate";
+import {SCOPES} from "../../../Permissions/PermissionMaps";
 
 function MainPage() {
     const [news, setNews] = useState([])
@@ -36,7 +38,14 @@ function MainPage() {
                     spacing={3}
                 >
                     <Grid item xs={12} sm={6} md={8}>
-                        <News setNews={setNews} data={news}/>
+                        <PermissionsGate
+                            RenderError={() => <p>You shall not pass!</p>}
+                            scopes={[SCOPES.canEdit]}
+                        >
+                            <h1>Private content</h1>
+                            <p>Must be an editor to view</p>
+                        </PermissionsGate>
+                        {/*<News setNews={setNews} data={news}/>*/}
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Contacts/>

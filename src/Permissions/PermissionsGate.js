@@ -1,6 +1,6 @@
-import { cloneElement } from "react";
+import {useEffect, useState} from "react";
 import { PERMISSIONS } from "./PermissionMaps";
-import { useGetRole } from "./UseGetRole";
+import api from "../Services/api";
 
 const hasPermission = ({ permissions, scopes }) => {
     const scopesMap = {};
@@ -13,14 +13,28 @@ const hasPermission = ({ permissions, scopes }) => {
 
 export default function PermissionsGate({
                                             children,
-                                            scopes = []
+                                            RenderError = () => <></>,
+                                            scopes = [],
+                                            errorProps
                                         }) {
-    const { role } = useGetRole();
-    const permissions = PERMISSIONS[role];
+    const [role, setRole] = useState(false);
+
+    useEffect(() => {
+        getCurrentRole().then((Role) => {
+            setRole(Role)
+        });
+    }, [])
+
+    const getCurrentRole = async () => {
+        const {data: Role} = await api.account.getRole()
+        return Role.results
+    }
+    console.log(role)
+    const permissions = PERMISSIONS["STUDENT"];
 
     const permissionGranted = hasPermission({ permissions, scopes });
-
-    if (!permissionGranted) return <></>
+    console.log(permissionGranted)
+    if (!permissionGranted) return <RenderError />;
 
     return <>{children}</>;
 }
