@@ -1,8 +1,8 @@
 import React, {useRef} from 'react';
 import {Editor} from "@tinymce/tinymce-react";
-import "./../../UI/CustomButton/Button.css"
+import "../CustomButton/Button.css"
 import {Box, Button} from "@mui/material";
-import CustomButton from "../../UI/CustomButton/CustomButton";
+import CustomButton from "../CustomButton/CustomButton";
 
 function TinyMce({showButtonForForm, titleButton, setHtml, html}) {
     const editorRef = useRef(null);

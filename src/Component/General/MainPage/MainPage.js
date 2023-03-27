@@ -6,7 +6,7 @@ import Contacts from "./Items/Contacts/Contacts";
 import api from "../../../Services/api";
 import {isMobile} from 'react-device-detect';
 
-function MainPage({isAuthorized}) {
+function MainPage() {
     const [news, setNews] = useState([])
 
     const getNews = async (limit) => {
@@ -36,7 +36,7 @@ function MainPage({isAuthorized}) {
                     spacing={3}
                 >
                     <Grid item xs={12} sm={6} md={8}>
-                        <News setNews={setNews} data={news} isAuthorized={isAuthorized}/>
+                        <News setNews={setNews} data={news}/>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <Contacts/>

@@ -2,7 +2,7 @@ import React from 'react';
 import Heading from "../../../../UI/Heading/Heading";
 import CustomCartsNews from "../../../../UI/CustomCartsNews/CustomCartsNews";
 
-function News({data, isAuthorized, setNews}) {
+function News({data, setNews}) {
     return (
         <>
             <Heading title={"Новости"}/>
@@ -12,7 +12,6 @@ function News({data, isAuthorized, setNews}) {
                             <CustomCartsNews
                                 setNews={setNews}
                                 id={item.id}
-                                isAuthorized={isAuthorized}
                                 title={item.name}
                                 description={item.caption}
                                 url={item.url_image}

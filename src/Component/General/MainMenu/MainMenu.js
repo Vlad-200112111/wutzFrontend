@@ -256,8 +256,8 @@ export default function MainMenu({isAuthorized, content}) {
                         <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/about">
                             О ВУЦ
                         </Link>
-                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/materials">
-                            Материалы
+                        <Link style={{marginLeft: 20, color: "#fff", textDecoration: "none"}} to="/schedule">
+                            Расписание
                         </Link>
                     </Box>
                     <Box style={{float: "right"}}>

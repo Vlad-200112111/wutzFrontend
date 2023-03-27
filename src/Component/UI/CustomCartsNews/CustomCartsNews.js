@@ -8,7 +8,7 @@ import DialogWindow from "../DialogWindow/DialogWindow";
 import CustomButton from "../CustomButton/CustomButton";
 import api from "../../../Services/api";
 
-function CustomCartsNews({id, url, title, description, key, isAuthorized, setNews}) {
+function CustomCartsNews({id, url, title, description, key, setNews}) {
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleCloseDialog = () => {
@@ -58,29 +58,29 @@ function CustomCartsNews({id, url, title, description, key, isAuthorized, setNew
                             <img className="cart-image" src={url}/>
                             {/*<div className="cart-image" style={{backgroundImage: `url(${url})`}}/>*/}
                         </Grid>
-                        <Grid item xs={isAuthorized ? 7.5 : 8}>
-                            <div style={{marginBottom: 25}}>
-                                <Typography className="cart-description" variant="body1" gutterBottom>
-                                    {description}
-                                </Typography>
-                            </div>
-                        </Grid>
-                        {
-                            isAuthorized && (
-                                <Grid item xs={0.5}>
-                                    <Stack spacing={2}>
-                                        <CustomIconButton
-                                            icon={<EditIcon/>}
-                                            caption="Нажмите для того, чтобы редактировать!"
-                                            functionIconButton={() => console.log('d')}/>
-                                        <CustomIconButton
-                                            icon={<DeleteIcon/>}
-                                            caption="Нажмите для того, чтобы удалить!"
-                                            functionIconButton={() => setOpenDialog(true)}/>
-                                    </Stack>
-                                </Grid>
-                            )
-                        }
+                        {/*<Grid item xs={isAuthorized ? 7.5 : 8}>*/}
+                        {/*    <div style={{marginBottom: 25}}>*/}
+                        {/*        <Typography className="cart-description" variant="body1" gutterBottom>*/}
+                        {/*            {description}*/}
+                        {/*        </Typography>*/}
+                        {/*    </div>*/}
+                        {/*</Grid>*/}
+                        {/*{*/}
+                        {/*    isAuthorized && (*/}
+                        {/*        <Grid item xs={0.5}>*/}
+                        {/*            <Stack spacing={2}>*/}
+                        {/*                <CustomIconButton*/}
+                        {/*                    icon={<EditIcon/>}*/}
+                        {/*                    caption="Нажмите для того, чтобы редактировать!"*/}
+                        {/*                    functionIconButton={() => console.log('d')}/>*/}
+                        {/*                <CustomIconButton*/}
+                        {/*                    icon={<DeleteIcon/>}*/}
+                        {/*                    caption="Нажмите для того, чтобы удалить!"*/}
+                        {/*                    functionIconButton={() => setOpenDialog(true)}/>*/}
+                        {/*            </Stack>*/}
+                        {/*        </Grid>*/}
+                        {/*    )*/}
+                        {/*}*/}
                     </Grid>
                 </Box>
             </Box>
