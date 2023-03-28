@@ -13,7 +13,6 @@ export const SCOPES = {
 };
 
 export const PERMISSIONS = {
-    [ROLES.Admin]: [SCOPES.canView],
     [ROLES.Student]: [SCOPES.canView, SCOPES.canEdit],
     [ROLES.Admin]: [
         SCOPES.canView,

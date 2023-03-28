@@ -4,7 +4,7 @@ import "./CustomCartsNews.css"
 import CustomIconButton from "../CustomIconButton/CustomIconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import DialogWindow from "../DialogWindow/DialogWindow";
+import CustomDialogWindow from "../CustomDialogWindow/CustomDialogWindow";
 import CustomButton from "../CustomButton/CustomButton";
 import api from "../../../Services/api";
 
@@ -24,7 +24,7 @@ function CustomCartsNews({id, url, title, description, key, setNews}) {
 
     return (
         <>
-            <DialogWindow
+            <CustomDialogWindow
                 open={openDialog}
                 maxWidth={'xs'}
                 handleClose={handleCloseDialog}

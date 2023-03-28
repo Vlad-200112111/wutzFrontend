@@ -11,7 +11,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DialogWindow({maxWidth, fullWidth, open, content, dialogTitle, title, handleClose, fullScreen = false}) {
+export default function CustomDialogWindow({maxWidth, fullWidth, open, content, dialogTitle, title, handleClose, fullScreen = false}) {
 
     return (
         <Dialog

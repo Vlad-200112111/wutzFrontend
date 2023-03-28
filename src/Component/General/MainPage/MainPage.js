@@ -40,7 +40,7 @@ function MainPage() {
                     <Grid item xs={12} sm={6} md={8}>
                         <PermissionsGate
                             RenderError={() => <p>You shall not pass!</p>}
-                            scopes={[SCOPES.canEdit]}
+                            scopes={[SCOPES.canView]}
                         >
                             <h1>Private content</h1>
                             <p>Must be an editor to view</p>

@@ -19,12 +19,14 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {Link} from "react-router-dom";
-import DialogWindow from "../../UI/DialogWindow/DialogWindow";
+import CustomDialogWindow from "../../UI/CustomDialogWindow/CustomDialogWindow";
 import {Grid, Typography} from "@mui/material";
 import CustomInput from "../../UI/CustomInput/CustomInput";
 import CustomButton from "../../UI/CustomButton/CustomButton";
 import api from "../../../Services/api";
+import {useNavigate} from "react-router-dom";
 import {isMobile} from 'react-device-detect';
+
 
 const drawerWidth = 240;
 
@@ -82,6 +84,9 @@ export default function MainMenu({isAuthorized, content}) {
     const [categoriesAndPages, setCategoriesAndPages] = useState([]);
     const [IsAuthorized, setIsAuthorized] = useState(isAuthorized);
     const [isMainPage, setIsMainPage] = useState(window.location.pathname === '/');
+
+    let navigate = useNavigate();
+
     const [styleHeader, setStyleHeader] = useState({
             background: "rgba(57,95,182,0)",
             borderBottom: "1px solid #fff",
@@ -181,16 +186,19 @@ export default function MainMenu({isAuthorized, content}) {
         event.preventDefault()
         const formData = new FormData(event.target)
         const {data: jwt} = await api.account.login(formData)
-        localStorage.setItem('access-token', jwt.access)
-        localStorage.setItem('refresh-token', jwt.refresh)
-        setOpenDialog(false)
-        setIsAuthorized(true)
+        if (jwt) {
+            localStorage.setItem('access-token', jwt.access)
+            localStorage.setItem('refresh-token', jwt.refresh)
+            setOpenDialog(false)
+            setIsAuthorized(true)
+            navigate("/personal-account")
+        }
     }
 
 
     return (
         <Box sx={{display: 'flex'}}>
-            <DialogWindow
+            <CustomDialogWindow
                 open={openDialog}
                 handleClose={handleCloseDialog}
                 fullWidth={true}
@@ -354,7 +362,8 @@ export default function MainMenu({isAuthorized, content}) {
                             <List key={index}>
                                 {
                                     item.pages?.map((itemPage, i) =>
-                                        <Link to={`/pages/${itemPage.id}`} style={{color: "#000000", textDecoration: "none"}}>
+                                        <Link to={`/pages/${itemPage.id}`}
+                                              style={{color: "#000000", textDecoration: "none"}}>
                                             <ListItem key={i} disablePadding>
                                                 <ListItemButton>
                                                     <ListItemText primary={itemPage.name}/>

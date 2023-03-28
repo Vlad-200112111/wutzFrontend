@@ -17,11 +17,11 @@ export default function PermissionsGate({
                                             scopes = [],
                                             errorProps
                                         }) {
-    const [role, setRole] = useState(false);
+    const [permissions, setPermissions] = useState([]);
 
     useEffect(() => {
         getCurrentRole().then((Role) => {
-            setRole(Role)
+            setPermissions(PERMISSIONS[Role])
         });
     }, [])
 
@@ -29,11 +29,9 @@ export default function PermissionsGate({
         const {data: Role} = await api.account.getRole()
         return Role.results
     }
-    console.log(role)
-    const permissions = PERMISSIONS["STUDENT"];
 
     const permissionGranted = hasPermission({ permissions, scopes });
-    console.log(permissionGranted)
+
     if (!permissionGranted) return <RenderError />;
 
     return <>{children}</>;

@@ -12,7 +12,7 @@ const endpoints = {
     login: (data) => axios.post("token/create/", data).catch(() => {
         return "ERROR"
     }),
-    getRole: (data) => axios.post("get-role/", data).catch(() => {
+    getRole: (data) => axios.get("get-role/", data).catch(() => {
         return "ERROR"
     }),
     checkAuthorization: (data) => axios.post("token/verify/",
