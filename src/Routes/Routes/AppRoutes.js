@@ -5,7 +5,7 @@ import MainPage from "../../Component/General/MainPage/MainPage";
 import MainMenu from "../../Component/General/MainMenu/MainMenu";
 import api from "../../Services/api";
 import PrivateRoute from "../Components/PrivateRoute/PrivateRoute";
-import PersonalAccount from "../../Component/PersonalAccount/PersonalAccount/PersonalAccount";
+import PersonalAccount from "../../Component/PersonalAccount/PersonalAccount";
 
 
 function AppRoutes() {
