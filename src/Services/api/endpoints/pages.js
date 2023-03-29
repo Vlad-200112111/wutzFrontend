@@ -1,7 +1,7 @@
 import axios from "../axios";
 
 const endpoints = {
-    addCategoryForPage: (data) => axios.post("category-for-page/create/", data).catch(() => {
+    createCategoryForPage: (data) => axios.post("category-for-page/", data).catch(() => {
             return "ERROR"
         }
     ),
@@ -9,7 +9,7 @@ const endpoints = {
     deleteCategoryForPage: (id) => axios.delete(`category-for-page/${id}`),
     getCategoryForPage: () => axios.get("category-for-page/"),
     getCategoriesAndPages: () => axios.get("categories-and-pages/"),
-    addPage: (data) => axios.post("page/create/", data).catch(() => {
+    addPage: (data) => axios.post("page/", data).catch(() => {
             return "ERROR"
         }
     ),
